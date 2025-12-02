@@ -2,6 +2,7 @@ package com.Library.LibraryManagement.GlobalControllerAdvice;
 
 import com.Library.LibraryManagement.Exceptions.EmptyRecordException;
 import com.Library.LibraryManagement.Exceptions.LibraryAlreadyExistsException;
+import com.Library.LibraryManagement.Exceptions.NoAccessException;
 import com.Library.LibraryManagement.Exceptions.NoRecordFoundException;
 import com.Library.LibraryManagement.Utils.Utility;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,12 @@ public class ControllerAdviceHandler {
     public ResponseEntity<?> handleNoRecordFoundException(NoRecordFoundException e){
         return  new ResponseEntity<>(Utility.errorMessageGenerator(HttpStatus.NOT_FOUND.value(), e,
                 "No record found"),HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(NoAccessException.class)
+    public ResponseEntity<?> handleNoAccessException(NoAccessException e){
+        return  new ResponseEntity<>(Utility.errorMessageGenerator(HttpStatus.FORBIDDEN.value(), e,
+                "Access denied"),HttpStatus.FORBIDDEN);
     }
 
 }
