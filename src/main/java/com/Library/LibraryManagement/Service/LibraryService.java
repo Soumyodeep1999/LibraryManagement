@@ -1,9 +1,7 @@
 package com.Library.LibraryManagement.Service;
 
 
-import com.Library.LibraryManagement.DTO.LibraryRequest;
-import com.Library.LibraryManagement.DTO.LibraryResponse;
-import com.Library.LibraryManagement.DTO.UserCredential;
+import com.Library.LibraryManagement.DTO.*;
 import com.Library.LibraryManagement.Exceptions.EmptyRecordException;
 import com.Library.LibraryManagement.Exceptions.LibraryAlreadyExistsException;
 import com.Library.LibraryManagement.Exceptions.NoAccessException;
@@ -11,6 +9,7 @@ import com.Library.LibraryManagement.Exceptions.NoRecordFoundException;
 import com.Library.LibraryManagement.Message.AcknowledgementMessage;
 import com.Library.LibraryManagement.Message.ErrorMessage;
 import com.Library.LibraryManagement.Model.Library;
+import com.Library.LibraryManagement.Repositry.BookRepo;
 import com.Library.LibraryManagement.Repositry.LibraryRepo;
 import com.Library.LibraryManagement.Utils.RoleSpecifierUtility;
 import com.Library.LibraryManagement.Utils.Utility;
@@ -19,6 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class LibraryService {
@@ -33,7 +35,8 @@ public class LibraryService {
     ModelMapper mapper;
     @Autowired
     AccessGranter accessGranter;
-
+    @Autowired
+    BookRepo bookRepo;
 
     public boolean greeter(UserCredential userCredential){
         return accessGranter.accessChecker(userCredential, RoleSpecifierUtility.greetLibraryAccess());
@@ -60,9 +63,15 @@ public class LibraryService {
         try {
             if (accessGranter.accessChecker(userCredential,RoleSpecifierUtility.viewLibraryAccess())){
                 if(!libraryRepo.findAll().isEmpty()){
-                    return new ResponseEntity<>(libraryRepo.findAll().stream()
-                            .map(library -> mapper.map(library, LibraryResponse.class))
-                            .toList()
+                    List<LibraryResponse> libraryResponses = new ArrayList<>();
+                    List<Library> libraryList = libraryRepo.findAll();
+                    for (Library library : libraryList){
+                        LibraryResponse libraryResponse = mapper.map(library,LibraryResponse.class);
+                        libraryResponse.setBookList(bookRepo.findByLibrary(library.getLibId())
+                                .stream().map(book -> mapper.map(book, BookInLibraryResponse.class)).toList());
+                        libraryResponses.add(libraryResponse);
+                    }
+                    return new ResponseEntity<>(libraryResponses
                             , HttpStatus.valueOf(200));
                 }
                 else {

@@ -13,5 +13,4 @@ public class LibraryRequest {
     private String branchName;
     private long mobileNumber;
     private int subscriptionCount;
-    private int bookList;
 }

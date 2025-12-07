@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -24,6 +26,6 @@ public class Library {
     private String branchName;
     private long mobileNumber;
     private Integer subscriptionCount;
-    private Integer bookList;
+    //private Integer bookList;
 
 }

@@ -39,4 +39,44 @@ public class RoleSpecifierUtility {
         return role;
     }
 
+    public static List<String> greetBookAccess(){
+        List role = new ArrayList<String>();
+        role.add("ADMIN");
+        role.add("LIBRARIAN");
+        role.add("STUDENT");
+        return role;
+    }
+
+    public static List<String> addBookAccess(){
+        List role = new ArrayList<String>();
+        role.add("ADMIN");
+        role.add("LIBRARIAN");
+        return role;
+    }
+
+    public static List<String> deleteBookAccess(){
+        List role = new ArrayList<String>();
+        role.add("ADMIN");
+        role.add("LIBRARIAN");
+        return role;
+    }
+
+    public static List<String> borrowBookAccess(){
+        List role = new ArrayList<String>();
+        role.add("STUDENT");
+        return role;
+    }
+
+    public static List<String> viewBookAccess(){
+        List role = new ArrayList<String>();
+        role.add("ADMIN");
+        role.add("LIBRARIAN");
+        return role;
+    }
+
+    public static List<String> viewBookByNameAccess(){
+        List role = new ArrayList<String>();
+        role.add("STUDENT");
+        return role;
+    }
 }
